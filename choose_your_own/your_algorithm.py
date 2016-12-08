@@ -31,14 +31,45 @@ plt.show()
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+
+#clf = KNeighborsClassifier(n_neighbors = 2, weights='distance', n_jobs = -1)
+#clf.fit(features_train, labels_train)
+#acc = clf.score(features_test, labels_test)
+#print("Accuracy is %.2f" % acc)
 
 
+#clf = RandomForestClassifier(n_estimators = 10)
+#clf.fit(features_train, labels_train)
+#acc = clf.score(features_test, labels_test)
+#print("Accuracy is %.2f" % acc)
 
 
+#clf = AdaBoostClassifier(n_estimators = 1000)
+#clf.fit(features_train, labels_train)
+#acc = clf.score(features_test, labels_test)
+#print("Accuracy is %.2f" % acc)
 
 
+classifiers = {
+            'k-NN' : KNeighborsClassifier(n_neighbors = 2, weights='distance', n_jobs = -1),
+            'Random-Forest' : RandomForestClassifier(n_estimators = 20),
+            'AdaBoost' : AdaBoostClassifier(n_estimators = 100),
+            'naive_bayes' :  GaussianNB(),
+            'svm' : SVC(kernel = 'rbf', C = 10000)
+        }
 
-try:
-    prettyPicture(clf, features_test, labels_test)
-except NameError:
-    pass
+for name in classifiers:
+    clf = classifiers[name]
+    clf.fit(features_train, labels_train)
+    acc_train = clf.score(features_train, labels_train)
+    acc_test = clf.score(features_test, labels_test)
+    print("Accuracy for %s for train is %.4f and test is %.4f" % (name, acc_train, acc_test))
+    try:
+        prettyPicture(clf, features_test, labels_test, name)
+    except NameError:
+        pass
